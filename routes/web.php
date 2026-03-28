@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Quotation;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Artisan;
 
 Route::redirect('/', 'dashboard');
 
@@ -164,5 +165,10 @@ Route::middleware([
         Route::get('/', Admin\PurchasePayments\Index::class)->name('index');
         Route::get('/create', Admin\PurchasePayments\Create::class)->name('create');
         Route::get('{id}/edit', Admin\PurchasePayments\Edit::class)->name('edit');
+    });
+
+    Route::get('/seed', function () {
+    Artisan::call('db:seed', ['--force' => true]);
+    return 'Seeder berhasil dijalankan';
     });
 });
