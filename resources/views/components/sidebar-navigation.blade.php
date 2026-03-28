@@ -2,7 +2,7 @@
     <nav class="mt-2"> <!--begin::Sidebar Menu-->
         <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
 
-            <li class="nav-header">Initialization</li>
+            <li class="nav-header">Inisialisasi</li>
             <x-new-nav-link title="Dashboard" bi_icon="bi-speedometer" route="admin.dashboard" />
             {{-- <x-new-nav-link title="Overview" bi_icon="bi-wallet" route="admin.accounts-summary" /> --}}
             @if (auth()->user()->hasPermission('manage roles'))
@@ -23,7 +23,7 @@
                     <x-new-nav-link title="Create Bank" bi_icon="" route="admin.banks.create" />
                 </x-new-nav-link-dropdown>
             @endif
-            <li class="nav-header">CRM</li>
+            <li class="nav-header">Kontak</li>
             @if (auth()->user()->hasPermission('manage clients'))
                 <x-new-nav-link-dropdown title="Clients" bi_icon="bi-people" route="admin.clients*">
                     <x-new-nav-link title="Clients List" bi_icon="" route="admin.clients.index" />
@@ -36,7 +36,7 @@
                     <x-new-nav-link title="Create Supplier" bi_icon="" route="admin.suppliers.create" />
                 </x-new-nav-link-dropdown>
 
-                <li class="nav-header">Product Management</li>
+                <li class="nav-header">Manajemen Produk</li>
             @endif
             @if (auth()->user()->hasPermission('manage units'))
                 <x-new-nav-link-dropdown title="Units" bi_icon="bi-box" route="admin.units*">
@@ -63,7 +63,7 @@
                     <x-new-nav-link title="Create Product" bi_icon="" route="admin.products.create" />
                 </x-new-nav-link-dropdown>
             @endif
-            <li class="nav-header">Accounting & Inventory</li>
+            <li class="nav-header">Akun Dan Manajemen</li>
 
 
             @if (auth()->user()->hasPermission('manage purchases'))
