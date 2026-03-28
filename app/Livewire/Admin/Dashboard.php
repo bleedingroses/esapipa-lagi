@@ -199,9 +199,9 @@ class Dashboard extends Component
 
 
         $lineChartModel->setJsonConfig([
-            'tooltip.y.formatter' => '(val) => `KES ${val.toLocaleString()}`',
-            'dataLabels.formatter' => '(val) => `KES ${val.toLocaleString()}`',
-            'yaxis.labels.formatter' => '(val) => `KES ${val.toLocaleString()}`',
+            'tooltip.y.formatter' => '(val) => `Rp ${val.toLocaleString()}`',
+            'dataLabels.formatter' => '(val) => `Rp ${val.toLocaleString()}`',
+            'yaxis.labels.formatter' => '(val) => `Rp ${val.toLocaleString()}`',
             // 'chart'=>"area"
         ]);
 

@@ -194,7 +194,7 @@ class AccountsSummary extends Component
 
 
         $lineChartModel->setJsonConfig([
-            'tooltip.y.formatter' => '(val) => `KES ${val.toLocaleString()}`',
+            'tooltip.y.formatter' => '(val) => `Rp ${val.toLocaleString()}`',
             // 'chart'=>"area"
         ]);
 
