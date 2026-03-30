@@ -12,18 +12,18 @@
 @import "custom";
 
 .bg-inv-primary {
-    background-color: #f29f67;
+    background-color: #679ff2;
 }
 
 .text-orange {
-    color: orangered;
+    color: rgb(0, 38, 255);
 }
 
 .bg-inv-secondary {
     background-color: #1e1e2c;
-    color: #f29f67;
+    color: #679ff2;
     .text-muted {
-        color: darken($color: #f29f67, $amount: 20%) !important;
+        color: darken($color: #679ff2, $amount: 20%) !important;
     }
     .nav-item {
         color: lighten($color: #1e1e2c, $amount: 40%) !important;
@@ -35,12 +35,12 @@
         }
     }
     .nav-link.active {
-        background-color: #f29f6777 !important;
+        background-color: #6775f277 !important;
         border-radius: 0;
     }
 }
 .text-inv-primary {
-    color: #f29f67;
+    color: #679ff2;
 }
 
 .text-inv-secondary {
@@ -48,7 +48,7 @@
 }
 
 .border-inv-primary {
-    border-color: #f29f67;
+    border-color: #679ff2;
 }
 
 body {
@@ -62,7 +62,7 @@ body {
     color: #ae0c00;
 }
 .btn-inv-primary {
-    color: #f29f67 ;
+    color: #679ff2 ;
     background-color: #ae0c00 ;
     :hover {
         color: white !important;
