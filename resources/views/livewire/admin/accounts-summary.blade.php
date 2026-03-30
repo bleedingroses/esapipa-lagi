@@ -14,24 +14,24 @@
                     <p class="fs-3 fw-bold">Rp {{ number_format($total_revenue, 2) }}</p>
                     <p class="text-{{ $revenueDeviation > 0 ? 'success' : 'danger' }}">
                         {{ number_format($revenueDeviation * 100, 2) }}%
-                        compared to last month</p>
+                        dibandingkan bulan lalu</p>
                 </div>
             </div>
         </div>
         <div class="col-md-5 col-12">
             <div class="card bg-inv-primary">
                 <div class="card-header text-inv-secondary">
-                    <h5>Generate Dokumen</h5>
+                    <h5>Download Dokumen</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="mb-3">
                             <button class="btn btn-secondary"
-                                wire:click="downloadPLStatement('{{ $month }}')">P&L Statement</button>
+                                wire:click="downloadPLStatement('{{ $month }}')">Laporan Laba-Rugi</button>
                         </div>
                         <div class="mb-3">
                             <button class="btn btn-secondary"
-                                wire:click="downloadAccountSummary('{{ $month }}')">Akun Pendapatan</button>
+                                wire:click="downloadAccountSummary('{{ $month }}')">Laporan Omset</button>
                         </div>
                     </div>
                 </div>
