@@ -14,6 +14,6 @@
         <small class="text-muted">{{ $client->bank->name }} <br> {{ $client->account_number }}</small>
     </div>
     <div class="ms-auto my-auto {{ $client->total_balance > 0 ? 'text-cash-red' : 'text-cash-green' }}">
-        <h6>KES {{ number_format($client->total_balance, 2) }}</h6>
+        <h6>Rp {{ number_format($client->total_balance, 2) }}</h6>
     </div>
 </li>
