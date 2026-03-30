@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
 
-    protected $appends = [
-        'total_purchase_count',
-        'total_sale_count',
-        'inventory_balance',
-    ];
     function brand()
     {
         return $this->belongsTo(Brand::class);
@@ -31,7 +26,7 @@ class Product extends Model
     }
     function purchases()
     {
-        return $this->belongsToMany(Purchase::class, 'product_purchase')->withPivot(['quantity', 'unit_price']);
+        return $this->belongsToMany(Purchase::class, 'product_purchase');
     }
     function quotations()
     {

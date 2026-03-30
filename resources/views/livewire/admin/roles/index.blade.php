@@ -53,7 +53,11 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>{{ $roles->links() }}</tr>
+                </tfoot>
             </table>
+            {{ $roles->links() }}
         </div>
     </div>
 </div>

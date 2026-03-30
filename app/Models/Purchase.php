@@ -6,17 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
+    protected $guarded = [];
 
-    protected $appends = [
-        'total_amount'
-    ];
     function supplier()
     {
         return $this->belongsTo(Supplier::class);
     }
     function products()
     {
-        return $this->belongsToMany(Product::class, 'product_purchase')->withPivot(['quantity', 'unit_price']);
+        return $this->belongsToMany(
+            Product::class,
+            'product_purchase',
+            'purchase_id', //foreign key di pivot ke purchase
+            'product_id' //foreign key ke product
+        )->withPivot(['quantity', 'unit_price']);
     }
 
     public function getTotalValueAttribute()
@@ -28,6 +31,9 @@ class Purchase extends Model
 
     public function getTotalAmountAttribute()
     {
+        if (!$this->relationLoaded('products')) {
+            return 0;
+        }
         return $this->products->sum(function ($product) {
             return $product->pivot->quantity * $product->pivot->unit_price;
         });
@@ -42,11 +48,11 @@ class Purchase extends Model
 
     function getTotalBalanceAttribute()
     {
-        return $this->total_amount - $this->total_paid; //This is how you know that I am qualified to be a Senior Backend Engineer
+        return $this->total_amount - $this->total_paid; 
     }
     function getIsPaidAttribute()
     {
-        return $this->total_balance <= 0; //This is how you know that I am qualified to be a Senior Backend Engineer
+        return $this->total_balance <= 0; 
     }
 
     function getTotalPaidAttribute()
@@ -60,6 +66,6 @@ class Purchase extends Model
 
     function payments()
     {
-        return $this->belongsToMany(PurchasePayment::class, 'purchase_purchase_payment')->withPivot(['amount']);
+        return $this->belongsToMany(PurchasePayment::class, 'purchase_purchase_payment')->withTimestamps()->withPivot(['amount']);
     }
 }

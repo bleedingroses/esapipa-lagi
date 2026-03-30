@@ -39,7 +39,11 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>{{ $users->links() }}</tr>
+                </tfoot>
             </table>
+            {{ $users->links() }}
         </div>
     </div>
 </div>

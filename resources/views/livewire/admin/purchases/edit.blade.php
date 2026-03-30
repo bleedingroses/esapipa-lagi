@@ -43,9 +43,9 @@
 
                     <div class="mb-3">
                         <label for="" class="form-label">Cari Produk</label>
-                        <input type="text" wire:model.live='productSearch' class="form-control" />
+                        <input type="text" wire:model.lazy='productSearch' class="form-control" />
                         <ul class="list-group mt-2 w-100">
-                            @if ($productSearch != '')
+                            @if (!empty($productSearch))
                                 @foreach ($products as $product)
                                     <x-product-list-group :product="$product" :selectedProductId="$selectedProductId"/>
                                 @endforeach
@@ -104,19 +104,20 @@
                                         $total = 0;
                                     @endphp
                                     @foreach ($productList as $key => $listItem)
+                                        @php
+                                            $product = $productsCache[$listItem['product_id']] ?? null;
+                                        @endphp
                                         <tr>
-                                            <td scope="row">
-                                                {{ App\Models\Product::find($listItem['product_id'])->id }}
-                                            </td>
-                                            <td>
-                                                {{ App\Models\Product::find($listItem['product_id'])->name }} <br>
-                                                <small
-                                                    class="text-muted">{{ App\Models\Product::find($listItem['product_id'])->quantity . App\Models\Product::find($listItem['product_id'])->unit->name }}</small>
+                                            
+                                            <td scope="row">{{ $product->id }}</td>
+                                            <td> {{ $product->name }} <br>
+                                                <small class="text-muted">
+                                                    {{ ($product->quantity ?? '-') . ($product->unit->name ?? '') }}
+                                                </small>
                                             </td>
                                             <td>{{ $listItem['quantity'] }}</td>
                                             <td>Rp {{ number_format($listItem['price'], 2) }}</td>
-                                            <td>Rp{{ number_format($listItem['quantity'] * $listItem['price'], 2) }}
-                                            </td>
+                                            <td>Rp {{ number_format($listItem['quantity'] * $listItem['price'], 2) }}</td>
                                             <td class="text-center">
                                                 @if ($listItem['quantity'] > 1)
                                                     <button wire:click='subtractQuantity({{ $key }})'
@@ -129,7 +130,7 @@
                                                     <i class="bi bi-plus"></i>
                                                 </button>
                                                 <button
-                                                    onclick="confirm('Are you sure you wish to remove this item from the list')||event.stopImmediatePropagation()"
+                                                    onclick="if(!confirm('Are you sure?')) return false"
                                                     wire:click='deleteCartItem({{ $key }})'
                                                     class="btn btn-danger">
                                                     <i class="bi bi-trash-fill"></i>
@@ -156,8 +157,12 @@
                             </tbody>
                         </table>
                             <button
-                                onclick="confirm('Are you sure you wish to Update this purchase')||event.stopImmediatePropagation()"
-                                wire:click='makePurchase' class="btn btn-dark text-inv-primary w-100">Update</button>
+                                wire:click='makePurchase'
+                                wire:loading.attr="disabled"
+                                class="btn btn-dark w-100">
+                                <span wire:loading.remove>Update</span>
+                                <span wire:loading>Loading...</span>
+                            </button>
 
                     </div>
                 </div>

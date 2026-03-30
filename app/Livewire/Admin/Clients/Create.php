@@ -14,7 +14,7 @@ class Create extends Component
     {
         return [
             'client.name' => "required",
-            'client.email' => "required|unique:clients,email",
+            'client.email' => "required|email",
             'client.address' => "required",
             'client.phone_number' => "required",
             'client.registration_number' => "nullable",

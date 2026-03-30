@@ -37,7 +37,11 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>{{ $units->links() }}</tr>
+                </tfoot>
             </table>
+            {{ $units->links() }}
         </div>
     </div>
 </div>

@@ -63,7 +63,11 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>{{ $suppliers->links() }}</tr>
+                </tfoot>
             </table>
+            {{ $suppliers->links() }}
         </div>
     </div>
 </div>

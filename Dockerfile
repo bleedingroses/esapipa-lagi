@@ -21,4 +21,4 @@ COPY . .
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # run app
-CMD ["sh", "-c", "sleep 20 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]
+CMD ["sh", "-c", "php artisan storage:link && sleep 20 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]

@@ -20,7 +20,7 @@ class Create extends Component
         return [
             'user.name' => "required",
             'selectedRoles' => "required",
-            'user.email' => "required|unique:users,email",
+            'user.email' => "required|email",
         ];
     }
 

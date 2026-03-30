@@ -17,6 +17,7 @@ class Edit extends Component
     public Purchase $purchase;
 
     public $productList = [];
+    public $productsCache = [];
 
 
 
@@ -31,15 +32,22 @@ class Edit extends Component
 
     function mount($id)
     {
-        $this->purchase = Purchase::find($id);
+        $this->productsCache = Product::whereIn(
+            'id',
+            collect($this->productList)->pluck('product_id')
+        )->get()->keyBy('id');
 
-        foreach ($this->purchase->products as $key => $product) {
+        $this->purchase = Purchase::with('products.unit')->find($id);
 
-            array_push($this->productList, [
+        foreach ($this->purchase->products  as $key => $product) {
+
+            $this->productList[] = [
                 'product_id' => $product->id,
                 'quantity' => $product->pivot->quantity,
                 'price' => $product->pivot->unit_price,
-            ]);
+            ];
+            //cache product
+            $this->productsCache[$product->id] = $product;
         }
         $this->supplierSearch = $this->purchase->supplier->name;
     }
@@ -47,6 +55,11 @@ class Edit extends Component
     function deleteCartItem($key)
     {
         array_splice($this->productList, $key, 1);
+
+        $this->productsCache = Product::whereIn(
+            'id',
+            collect($this->productList)->pluck('product_id')
+        )->get()->keyBy('id');
     }
 
     function addQuantity($key)
@@ -62,7 +75,9 @@ class Edit extends Component
     function selectSupplier($id)
     {
         $this->purchase->supplier_id = $id;
-        $this->supplierSearch = $this->purchase->supplier->name;
+
+        $supplier = Supplier::find($id);
+        $this->supplierSearch = $supplier?->name;
 
     }
     function selectProduct($id)
@@ -74,9 +89,9 @@ class Edit extends Component
     {
         try {
             $this->validate([
-                'selectedProductId' => 'required',
-                'quantity' => 'required',
-                'price' => 'required',
+                'selectedProductId' => 'required|exists:products,id',
+                'quantity' => 'required|numeric|min:1',
+                'price' => 'required|numeric|min:0',
             ]);
 
             foreach ($this->productList as $key => $listItem) {
@@ -103,16 +118,34 @@ class Edit extends Component
         } catch (\Throwable $th) {
             $this->dispatch('done', error: "Something Went Wrong: " . $th->getMessage());
         }
+
+        $this->productsCache[$this->selectedProductId] = Product::find($this->selectedProductId);
+        $this->productsCache = Product::whereIn(
+            'id',
+            collect($this->productList)->pluck('product_id')
+        )->get()->keyBy('id');
     }
 
     function makePurchase()
-    {
-
+    {   
+        if (empty($this->productList)) {
+            return $this->dispatch('done', error: 'Produk tidak boleh kosong');
+        }
+        
         try {
             $this->validate();
-            $this->purchase->update();
+
+            //update file utama
+            $this->purchase->update([
+                'purchase_date' => $this->purchase->purchase_date,
+                'supplier_id' => $this->purchase->supplier_id,
+            ]);
+
+            //reset relasi
             $this->purchase->products()->detach();
-            foreach ($this->productList as $key => $listItem) {
+
+            //attach ulang
+            foreach ($this->productList as $listItem) {
                 $this->purchase->products()->attach($listItem['product_id'], [
                     'quantity' => $listItem['quantity'],
                     'unit_price' => $listItem['price'],
@@ -125,8 +158,17 @@ class Edit extends Component
     }
     public function render()
     {
-        $suppliers = Supplier::where('name', 'like', '%' . $this->supplierSearch . '%')->get();
-        $products = Product::where('name', 'like', '%' . $this->productSearch . '%')->get();
+        $suppliers = $this->supplierSearch
+        ? Supplier::where('name', 'like', '%' . $this->supplierSearch . '%')->get()
+        : [];
+        
+        $products = [];
+
+        if ($this->productSearch) {
+            $products = Product::where('name', 'like', '%' . $this->productSearch . '%')
+                ->limit(5)    
+                ->get();
+        }
 
         return view('livewire.admin.purchases.edit', [
             'suppliers' => $suppliers,

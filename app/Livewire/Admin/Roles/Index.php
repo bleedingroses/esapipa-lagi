@@ -42,7 +42,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.admin.roles.index', [
-            'roles' => Role::all(),
+            'roles' => Role::paginate(10)
         ]);
     }
 }

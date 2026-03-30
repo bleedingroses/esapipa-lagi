@@ -26,7 +26,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.admin.users.index', [
-            'users' => User::all(),
+            'users' => User::paginate(10)
         ]);
     }
 }

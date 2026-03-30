@@ -18,7 +18,7 @@ class Edit extends Component
         return [
             'user.name' => "required",
             'selectedRoles' => "required",
-            'user.email' => "required|unique:users,email," . $this->user->id,
+            'user.email' => "required|email," . $this->user->id,
         ];
     }
 
