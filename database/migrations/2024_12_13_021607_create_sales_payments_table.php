@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained();
             $table->string('transaction_reference');
             $table->dateTime('payment_time');
-            $table->decimal('amount');
+            $table->bigInteger('amount');
             $table->timestamps();
         });
     }

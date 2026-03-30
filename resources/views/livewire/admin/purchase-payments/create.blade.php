@@ -71,11 +71,14 @@
                                     id="">
                                     @if ($purchase_payment->supplier)
                                         <option value=""></option>
-                                        @foreach ($purchase_payment->supplier->purchases as $purchase)
-                                            <option value="{{ $purchase->id }}">Purchase #{{ $purchase->id }} <br>
-                                                Balance:
-                                                Rp {{ number_format($purchase->total_balance) }}</option>
-                                        @endforeach
+                                            @foreach ($purchase_payment->supplier->purchases as $purchase)
+                                                <option value="{{ $purchase->id }}">
+                                                    Purchase #{{ $purchase->id }}
+                                                    | Total: Rp {{ number_format($purchase->total_amount) }}
+                                                    | Paid: Rp {{ number_format($purchase->total_payment ?? 0) }}
+                                                    | Balance: Rp {{ number_format($purchase->total_balance) }}
+                                                </option>
+                                            @endforeach
                                     @endif
                                 </select>
                             </div>
@@ -165,6 +168,21 @@
                                     <td></td>
                                     <td style="font-size: 18px">
                                         <strong>Rp {{ number_format($total, 2) }}</strong>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                @php
+                                    $remaining = $purchase_payment->amount - $total;
+                                @endphp
+                                <tr>
+                                    <td colspan="2" style="font-size: 16px">
+                                        <strong>Sisa Uang</strong>
+                                    </td>
+                                    <td></td>
+                                    <td style="font-size: 16px">
+                                        <strong class="{{ $remaining < 0 ? 'text-danger' : 'text-success' }}">
+                                            Rp {{ number_format($remaining, 2) }}
+                                        </strong>
                                     </td>
                                     <td></td>
                                 </tr>

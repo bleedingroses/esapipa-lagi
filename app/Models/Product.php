@@ -26,7 +26,8 @@ class Product extends Model
     }
     function purchases()
     {
-        return $this->belongsToMany(Purchase::class, 'product_purchase');
+        return $this->belongsToMany(Purchase::class, 'product_purchase')
+        ->withPivot('quantity');
     }
     function quotations()
     {
@@ -69,7 +70,11 @@ class Product extends Model
 
     function getInventoryBalanceAttribute()
     {
-        return $this->total_purchase_count - $this->total_sale_count;
+        $totalPurchase = $this->purchases->sum(function ($purchase) {
+            return $purchase->pivot->quantity;
+        });
+
+        return $totalPurchase; // sementara belum ada sales
     }
 
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('purchase_id')->constrained(); //50,000
             $table->foreignId('purchase_payment_id')->constrained(); //40,000
-            $table->decimal('amount');//20000
+            $table->bigInteger('amount');//20000
             $table->timestamps();
         });
     }

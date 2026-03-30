@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->foreignId('unit_id')->constrained();
-            $table->decimal('quantity');
-            $table->decimal('purchase_price');
-            $table->decimal('sale_price');
+            $table->bigInteger('quantity');
+            $table->bigInteger('purchase_price');
+            $table->bigInteger('sale_price');
             $table->timestamps();
         });
     }

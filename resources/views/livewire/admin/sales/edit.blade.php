@@ -157,7 +157,7 @@
                         </table>
                             <button
                                 onclick="confirm('Are you sure you wish to Update this sale')||event.stopImmediatePropagation()"
-                                wire:click='maRpale' class="btn btn-dark text-inv-primary w-100">Update</button>
+                                wire:click='makeSale' class="btn btn-dark text-inv-primary w-100">Update</button>
 
                     </div>
                 </div>

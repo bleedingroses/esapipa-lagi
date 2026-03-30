@@ -15,7 +15,7 @@
                         <th>Jumlah Yang Dibeli</th>
                         <th>Total Pembelian</th>
                         <th>Total Dibayar</th>
-                        <th>Total Stok</th>
+                        <th>Total Utang</th>
                         <th>Status</th>
                         <th class="text-center">Aksi</th>
                     </tr>

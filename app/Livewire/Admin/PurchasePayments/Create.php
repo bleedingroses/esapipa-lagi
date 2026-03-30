@@ -71,12 +71,20 @@ class Create extends Component
             if (Purchase::find($this->selectedPurchaseId)->total_balance < $this->amount) {
                 throw new \Exception("Total Balance is Low", 1);
             }
-            foreach ($this->purchaseList as $key => $listItem) {
-                $newBalance = Purchase::find($listItem['purchase_id'])->total_balance - $listItem['amount'];
-                if ($listItem['purchase_id'] == $this->selectedPurchaseId && $newBalance < $this->amount) {
-                    throw new \Exception("Total Balance is Low", 1);
+            $totalAlreadyAllocated = 0;
+
+            foreach ($this->purchaseList as $listItem) {
+                if ($listItem['purchase_id'] == $this->selectedPurchaseId) {
+                    $totalAlreadyAllocated += $listItem['amount'];
                 }
             }
+
+            $purchase = Purchase::find($this->selectedPurchaseId);
+
+            if (($totalAlreadyAllocated + $this->amount) > $purchase->total_balance) {
+                throw new \Exception("Total Balance is Low", 1);
+            }
+
             foreach ($this->purchaseList as $key => $listItem) {
                 if ($listItem['purchase_id'] == $this->selectedPurchaseId) {
                     $this->purchaseList[$key]['amount'] += $this->amount;
@@ -95,8 +103,15 @@ class Create extends Component
                 'selectedPurchaseId',
                 'amount',
             ]);
-        } catch (\Throwable $th) {
+        }
+
+        catch (\Throwable $th) {
             $this->dispatch('done', error: "Something Went Wrong: " . $th->getMessage());
+        }
+        $totalList = collect($this->purchaseList)->sum('amount');
+
+        if (($totalList + $this->amount) > $this->purchase_payment->amount) {
+            throw new \Exception("Payment amount is not enough", 1);
         }
     }
 
@@ -125,7 +140,9 @@ class Create extends Component
     }
     public function render()
     {
-        $suppliers = Supplier::where('name', 'like', '%' . $this->supplierSearch . '%')->get();
+        $suppliers = Supplier::where('name', 'like', '%' . $this->supplierSearch . '%')
+        ->with('purchases.products') // ← INI KUNCI
+        ->get();
         return view('livewire.admin.purchase-payments.create', [
             'suppliers' => $suppliers
         ]);

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Product;
+use App\Models\PurchasePayment;
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
@@ -31,10 +34,7 @@ class Purchase extends Model
 
     public function getTotalAmountAttribute()
     {
-        if (!$this->relationLoaded('products')) {
-            return 0;
-        }
-        return $this->products->sum(function ($product) {
+        return $this->products()->get()->sum(function ($product) {
             return $product->pivot->quantity * $product->pivot->unit_price;
         });
     }
