@@ -167,8 +167,15 @@ Route::middleware([
         Route::get('{id}/edit', Admin\PurchasePayments\Edit::class)->name('edit');
     });
 
-    Route::get('/seed', function () {
-    Artisan::call('db:seed', ['--force' => true]);
-    return 'Seeder berhasil dijalankan';
+    Route::get('/setup', function () {
+        Artisan::call('migrate:fresh', [
+            '--force' => true,
+        ]);
+
+        Artisan::call('db:seed', [
+            '--force' => true,
+        ]);
+
+        return 'Setup berhasil dijalankan (migrate:fresh + seed)';
     });
 });
