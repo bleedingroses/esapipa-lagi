@@ -60,21 +60,19 @@ class Product extends Model
         return $amount;
     }
     function getTotalSaleCountAttribute(){
-        $amount = 0;
-        foreach ($this->sales as $sale) {
-            $amount += ($sale->pivot->quantity);
+
+        if (!$this->relationLoaded('sales')) {
+            return 0;
         }
 
-        return $amount;
+        return $this->sales->sum(function ($sale) {
+        return $sale->pivot->quantity;
+        });
     }
 
     function getInventoryBalanceAttribute()
     {
-        $totalPurchase = $this->purchases->sum(function ($purchase) {
-            return $purchase->pivot->quantity;
-        });
-
-        return $totalPurchase; // sementara belum ada sales
+        return $this->total_purchase_count - $this->total_sale_count;
     }
 
 

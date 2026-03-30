@@ -106,23 +106,31 @@ class Create extends Component
 
         try {
             $this->validate();
+
+            if (count($this->productList) === 0) {
+                throw new \Exception("Produk belum ditambahkan", 1);
+            }
+
             foreach ($this->productList as $key => $listItem) {
                 if (Product::find($listItem['product_id'])->inventory_balance < $listItem['quantity']) {
                     throw new \Exception("Inventory Balance for " . Product::find($listItem['product_id'])->name . " is Low", 1);
                 }
             }
+
             $this->sale->save();
-            foreach ($this->productList as $key => $listItem) {
+
+            foreach ($this->productList as $listItem) {
                 $this->sale->products()->attach($listItem['product_id'], [
                     'quantity' => $listItem['quantity'],
                     'unit_price' => $listItem['price'],
                 ]);
             }
-            if ($this->sale->products->count() == 0) {
-                $this->sale->delete();
-            }
+
             return redirect()->route('admin.sales.index');
-        } catch (\Throwable $th) {
+
+        }
+        
+        catch (\Throwable $th) {
             $this->dispatch('done', error: "Something Went Wrong: " . $th->getMessage());
         }
     }
