@@ -47,7 +47,7 @@
                         <ul class="list-group mt-2 w-100">
                             @if ($productSearch != '')
                                 @foreach ($products as $product)
-                                    <x-product-list-item :product="$product" :selectedProductId="$selectedProductId" />
+                                    <x-product-list-group :product="$product" :selectedProductId="$selectedProductId" />
                                 @endforeach
                             @endif
                         </ul>

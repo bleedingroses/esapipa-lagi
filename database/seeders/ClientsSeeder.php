@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Faker\Factory;
+use Faker\Factory as Faker;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ class ClientsSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Factory::create();
+        $faker = Faker::create();
 
         $clients = [];
         for ($i = 1; $i <= 20; $i++) {
