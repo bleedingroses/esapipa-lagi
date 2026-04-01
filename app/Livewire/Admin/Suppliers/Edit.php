@@ -14,13 +14,12 @@ class Edit extends Component
     {
         return [
             'supplier.name' => "required",
-            'supplier.email' => "required|email",
+            'supplier.email' => "nullable",
             'supplier.address' => "required",
             'supplier.phone_number' => "required",
-            'supplier.registration_number' => "nullable",
-            'supplier.tax_id' => "required",
-            'supplier.bank_id' => "required",
-            'supplier.account_number' => "required",
+            'supplier.tax_id' => "nullable",
+            'supplier.bank_id' => "nullable",
+            'supplier.account_number' => "nullable",
         ];
     }
 

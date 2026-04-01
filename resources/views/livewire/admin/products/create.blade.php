@@ -48,9 +48,6 @@
                 <div class="mb-3">
                     <label for="" class="form-label">Deskripsi Produk</label>
                     <textarea wire:model.live='product.description' class="form-control" name="" id="" rows="3"></textarea>
-                    @error('product.description')
-                        <small id="" class="form-text text-danger">{{ $message }}</small>
-                    @enderror
                 </div>
 
                 <div class="col-md-6 col-12">
@@ -69,18 +66,7 @@
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Jumlah</label>
-                        <input wire:model.live='product.quantity' type="number" min="0" step="0.1"
-                            class="form-control" name="quantity" id="name" aria-describedby="quantity"
-                            placeholder="Enter your Product's quantity per unit" />
-                        @error('product.quantity')
-                            <small id="" class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-                <div class="col-md-6 col-12">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Harga Awal</label>
+                        <label for="name" class="form-label">Harga Pabrik</label>
                         <input wire:model.live='product.purchase_price' type="number" min="0" step="0.1"
                             class="form-control" name="purchase_price" id="name" aria-describedby="purchase_price"
                             placeholder="Enter your Product's purchase price" />
@@ -91,13 +77,17 @@
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="mb-3">
+                        <label class="form-label">Margin (%)</label>
+                        <input wire:model.live="margin" type="number" min="0" step="0.1"
+                            class="form-control" placeholder="Masukkan margin (%)" />
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="mb-3">
                         <label for="name" class="form-label">Harga Jual</label>
                         <input wire:model.live='product.sale_price' type="number" min="0" step="0.1"
                             class="form-control" name="sale_price" id="name" aria-describedby="sale_price"
-                            placeholder="Enter your Product's sale price" />
-                        @error('product.sale_price')
-                            <small id="" class="form-text text-danger">{{ $message }}</small>
-                        @enderror
+                            placeholder="Enter your Product's sale price" readonly/>
                     </div>
                 </div>
 

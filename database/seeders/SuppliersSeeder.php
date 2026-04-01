@@ -19,7 +19,6 @@ class SuppliersSeeder extends Seeder
                 'email' => 'untung@berkah.co.id',
                 'address' => 'Jakarta, Indonesia',
                 'phone_number' => '+62  812 345 678',
-                'registration_number' => 'PVT-00001234',
                 'tax_id' => 'P0123456789Q',
                 'bank_id' => 1, // Adjust this ID based on your actual `banks` table
                 'account_number' => '1234567890',
@@ -31,7 +30,6 @@ class SuppliersSeeder extends Seeder
                 'email' => 'berkah@jaya.com',
                 'address' => 'Bandung, Indonesia',
                 'phone_number' => '+62 987 654 321',
-                'registration_number' => 'PVT-00005678',
                 'tax_id' => 'PVT87654321',
                 'bank_id' => 2, // Adjust this ID based on your actual `banks` table
                 'account_number' => '0987654321',
@@ -43,7 +41,6 @@ class SuppliersSeeder extends Seeder
                 'email' => 'sinar@gemilang.com',
                 'address' => 'Sumatera, Indonesia',
                 'phone_number' => '+62 879 657 435',
-                'registration_number' => 'PVT-00009123',
                 'tax_id' => 'PVT12398765',
                 'bank_id' => 3, // Adjust this ID based on your actual `banks` table
                 'account_number' => '1122334455',
@@ -55,7 +52,6 @@ class SuppliersSeeder extends Seeder
                 'email' => 'tafio@group.com',
                 'address' => 'Malang, Indonesia',
                 'phone_number' => '+62 768 546 324',
-                'registration_number' => 'PVT-00002345',
                 'tax_id' => 'PVT34567890',
                 'bank_id' => 4, // Adjust this ID based on your actual `banks` table
                 'account_number' => '2233445566',
@@ -67,7 +63,6 @@ class SuppliersSeeder extends Seeder
                 'email' => 'surabaya@laken.com',
                 'address' => 'Surabaya, Indonesia',
                 'phone_number' => '+62 21 328 8000',
-                'registration_number' => 'PVT-00004567',
                 'tax_id' => 'PVT56789012',
                 'bank_id' => 5, // Adjust this ID based on your actual `banks` table
                 'account_number' => '3344556677',

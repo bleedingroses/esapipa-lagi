@@ -12,7 +12,7 @@
                         <th>ID</th>
                         <th>Detail Utama</th>
                         <th>Alamat</th>
-                        <th>Detail Bisnis</th>
+                        <th>Detail</th>
                         <th>Detail Rekening</th>
                         <th>Jumlah Pembelian</th>
                         <th>Jumlah Total Pembelian</th>
@@ -30,12 +30,11 @@
                             </td>
                             <td>{{ $client->address }}</td>
                             <td>
-                                <small><strong>Tax ID:</strong> {{ $client->tax_id }}</small><br>
-                                <small><strong>Reg No:</strong> {{ $client->registration_number ?? 'N/A' }}</small>
+                                <small><strong>Tax ID:</strong> {{ $client->tax_id ?? 'N/A' }}</small>
                             </td>
                             <td>
-                                <small><strong>Bank:</strong> {{ $client->bank->name }}</small><br>
-                                <small><strong>A/c No:</strong> {{ $client->account_number }}</small>
+                                <small><strong>Bank:</strong> {{ $client->bank->name ?? 'N/A' }}</small><br>
+                                <small><strong>A/c No:</strong> {{ $client->account_number ?? 'N/A' }}</small>
                             </td>
                             <td>
                                 {{ $client->sales->count() }}

@@ -12,7 +12,7 @@
                         <th>ID</th>
                         <th>Detail Produk</th>
                         <th>Kategori</th>
-                        <th>Satuan Ukuran</th>
+                        <th>Satuan</th>
                         <th>Total Stok</th>
                         <th class="text-center">Actions</th>
                     </tr>
@@ -23,11 +23,11 @@
                             <td scope="row">{{ $product->id }}</td>
                             <td>
                                 <h6>{{ $product->name }}</h6>
-                                <small>{{ $product->description }}</small>
+                                <small>{{ $product->description ?? 'N/A' }}</small>
                             </td>
                             <td>{{ $product->category->name }}</td>
                             <td>
-                                {{ $product->quantity . ' ' . $product->unit->name }}
+                                {{ $product->unit->name }}
                             </td>
                             <td>
                                 {{ $product->inventory_balance }}

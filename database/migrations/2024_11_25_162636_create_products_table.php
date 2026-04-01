@@ -16,9 +16,8 @@ return new class extends Migration
             $table->foreignId('brand_id')->constrained();
             $table->foreignId('product_category_id')->constrained();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->foreignId('unit_id')->constrained();
-            $table->bigInteger('quantity');
             $table->bigInteger('purchase_price');
             $table->bigInteger('sale_price');
             $table->timestamps();

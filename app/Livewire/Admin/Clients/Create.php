@@ -14,13 +14,12 @@ class Create extends Component
     {
         return [
             'client.name' => "required",
-            'client.email' => "required|email",
+            'client.email' => "nullable",
             'client.address' => "required",
             'client.phone_number' => "required",
-            'client.registration_number' => "nullable",
-            'client.tax_id' => "required",
-            'client.bank_id' => "required",
-            'client.account_number' => "required",
+            'client.tax_id' => "nullable",
+            'client.bank_id' => "nullable",
+            'client.account_number' => "nullable",
         ];
     }
 

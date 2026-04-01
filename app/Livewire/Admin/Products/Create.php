@@ -11,16 +11,16 @@ use Livewire\Component;
 class Create extends Component
 {
     public Product $product;
+    public $margin = 0;
 
     function rules()
     {
         return [
             'product.name' => 'required',
             'product.brand_id' => 'required',
-            'product.description' => 'required',
+            'product.description' => 'nullable',
             'product.unit_id' => 'required',
             'product.product_category_id' => 'required',
-            'product.quantity' => 'required',
             'product.purchase_price' => 'required',
             'product.sale_price' => 'required',
         ];
@@ -54,5 +54,24 @@ class Create extends Component
             'units' => Unit::all(),
             'brands' => Brand::all()
         ]);
+    }
+
+    public function updatedProductPurchasePrice()
+    {
+        $this->calculateSalePrice();
+    }
+
+    public function updatedMargin()
+    {
+        $this->calculateSalePrice();
+    }
+
+    public function calculateSalePrice()
+    {
+        if ($this->product->purchase_price && $this->margin) {
+            $this->product->sale_price =
+                $this->product->purchase_price +
+                ($this->product->purchase_price * $this->margin / 100);
+        }
     }
 }

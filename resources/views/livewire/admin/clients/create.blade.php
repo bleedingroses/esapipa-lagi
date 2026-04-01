@@ -41,23 +41,9 @@
 
                 <div class="col-md-6 col-12">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nomor Registrasi</label>
-                        <input wire:model.live='client.registration_number' type="text" class="form-control"
-                            name="name" id="name" aria-describedby=""
-                            placeholder="Enter Business Registration Number" />
-                        @error('client.registration_number')
-                            <small id="" class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-                <div class="col-md-6 col-12">
-                    <div class="mb-3">
                         <label for="name" class="form-label">NPWP</label>
                         <input wire:model.live='client.tax_id' type="text" class="form-control" name="name"
                             id="name" aria-describedby="" placeholder="Enter Tax ID" />
-                        @error('client.tax_id')
-                            <small id="" class="form-text text-danger">{{ $message }}</small>
-                        @enderror
                     </div>
                 </div>
 
@@ -78,17 +64,11 @@
                             <option value="{{ $bank->id }}">{{ $bank->name }}</option>
                         @endforeach
                     </select>
-                    @error('client.bank_id')
-                        <small id="" class="form-text text-danger">{{ $message }}</small>
-                    @enderror
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">Nomor Rekening</label>
                     <input wire:model.live='client.account_number' type="text" class="form-control" name="name"
                         id="name" aria-describedby="" placeholder="Enter Client's Account Number" />
-                    @error('client.account_number')
-                        <small id="" class="form-text text-danger">{{ $message }}</small>
-                    @enderror
                 </div>
 
 

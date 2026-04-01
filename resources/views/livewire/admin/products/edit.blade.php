@@ -48,9 +48,6 @@
                 <div class="mb-3">
                     <label for="" class="form-label">Deskripsi Produk</label>
                     <textarea wire:model.live='product.description' class="form-control" name="" id="" rows="3"></textarea>
-                    @error('product.description')
-                        <small id="" class="form-text text-danger">{{ $message }}</small>
-                    @enderror
                 </div>
 
                 <div class="col-md-6 col-12">
@@ -69,18 +66,7 @@
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Jumlah</label>
-                        <input wire:model.live='product.quantity' type="number" min="0" step="0.1"
-                            class="form-control" name="quantity" id="name" aria-describedby="quantity"
-                            placeholder="Enter your Product's quantity per unit" />
-                        @error('product.quantity')
-                            <small id="" class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-                <div class="col-md-6 col-12">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Harga Awal</label>
+                        <label for="name" class="form-label">Harga Pabrik</label>
                         <input wire:model.live='product.purchase_price' type="number" min="0" step="0.1"
                             class="form-control" name="purchase_price" id="name" aria-describedby="purchase_price"
                             placeholder="Enter your Product's purchase price" />

@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->text('address');
             $table->string('phone_number');
-            $table->string('registration_number')->nullable();
-            $table->string('tax_id');
-            $table->foreignId('bank_id')->constrained();
-            $table->string('account_number');
+            $table->string('tax_id')->nullable();
+            $table->foreignId('bank_id')->nullable();
+            $table->string('account_number')->nullable();
             $table->timestamps();
         });
     }

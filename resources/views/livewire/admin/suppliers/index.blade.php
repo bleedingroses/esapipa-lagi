@@ -12,7 +12,7 @@
                         <th>ID</th>
                         <th>Detail Utama</th>
                         <th>Alamat</th>
-                        <th>Detail Bisnis</th>
+                        <th>Detail</th>
                         <th>Detail Rekening</th>
                         <th>Total Pembelian</th>
                         <th>Total Harga Pembelian</th>
@@ -30,12 +30,11 @@
                             </td>
                             <td>{{ $supplier->address }}</td>
                             <td>
-                                <small><strong>Tax ID:</strong> {{ $supplier->tax_id }}</small><br>
-                                <small><strong>Reg No:</strong> {{ $supplier->registration_number ?? 'N/A' }}</small>
+                                <small><strong>Tax ID:</strong> {{ $supplier->tax_id ?? 'N/A' }}</small><br>
                             </td>
                             <td>
-                                <small><strong>Bank:</strong> {{ $supplier->bank->name }}</small><br>
-                                <small><strong>A/c No:</strong> {{ $supplier->account_number }}</small>
+                                <small><strong>Bank:</strong> {{ $supplier->bank->name ?? 'N/A' }}</small><br>
+                                <small><strong>A/c No:</strong> {{ $supplier->account_number ?? 'N/A' }}</small>
                             </td>
                             <td>
                                 {{ $supplier->purchases->count() }}

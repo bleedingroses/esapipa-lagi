@@ -17,10 +17,9 @@ class Edit extends Component
         return [
             'product.name' => 'required',
             'product.brand_id' => 'required',
-            'product.description' => 'required',
+            'product.description' => 'nullable',
             'product.unit_id' => 'required',
             'product.product_category_id' => 'required',
-            'product.quantity' => 'required',
             'product.purchase_price' => 'required',
             'product.sale_price' => 'required',
         ];
