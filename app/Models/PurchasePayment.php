@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchasePayment extends Model
 {
+    protected $guarded = [];
+    
     function purchases()
     {
         return $this->belongsToMany(Purchase::class, 'purchase_purchase_payment')->withPivot('amount');

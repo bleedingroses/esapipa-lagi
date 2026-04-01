@@ -12,7 +12,7 @@
                         <th>ID</th>
                         <th>Tanggal dan Waktu</th>
                         <th>Supplier</th>
-                        <th>Referensi</th>
+                        <th>Nomor PO</th>
                         <th>Faktur Pembelian</th>
                         <th>Total Yang Dibayar</th>
                         <th class="text-center">Aksi</th>
@@ -26,9 +26,7 @@
                                 <h6>{{ Carbon\Carbon::parse($payment->payment_time)->format('jS F,Y h:i:sA') }}</h6>
                             </td>
                             <td>
-                                <h5>{{ $payment->supplier->name }}</h5>
-                                <h6>Balance: <strong>Rp {{ number_format($payment->supplier->balance, 2) }}</strong>
-                                </h6>
+                                <h6>{{ $payment->supplier->name }}</h6>
                             </td>
                             <td>
                                 <small>{{ $payment->transaction_reference }}</small>
@@ -37,7 +35,6 @@
                             <td>
                                 @foreach ($payment->purchases as $purchase)
                                     <li>
-                                        Purchase No: #{{ $purchase->id }} <br>
                                         Rp {{ number_format($purchase->total_paid, 2) }}
                                     </li>
                                 @endforeach
@@ -47,10 +44,10 @@
                             </td>
 
                             <td class="text-center">
-                                <a wire:navigate href="{{ route('admin.purchase-payments.edit', $payment->id) }}"
+                                {{-- <a wire:navigate href="{{ route('admin.purchase-payments.edit', $payment->id) }}"
                                     class="btn btn-secondary">
                                     <i class="bi bi-pencil-square"></i>
-                                </a>
+                                </a> --}}
                                 <button
                                     onclick="confirm('Are you sure you wish to delete this Purchase Payment?')||event.stopImmediatePropagation()"
                                     class="btn btn-danger" wire:click='delete({{ $payment->id }})'>

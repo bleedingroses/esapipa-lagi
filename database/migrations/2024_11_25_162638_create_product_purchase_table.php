@@ -17,6 +17,7 @@ return new class extends Migration
             $table->primary(['product_id', 'purchase_id', 'unit_price']);
             $table->bigInteger('quantity');
             $table->bigInteger('unit_price');
+            $table->float('discount_percentage')->default(0);
             $table->timestamps();
         });
     }

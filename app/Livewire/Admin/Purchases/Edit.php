@@ -15,7 +15,7 @@ class Edit extends Component
     public $quantity;
     public $price;
     public Purchase $purchase;
-
+    public $tax = 0;
     public $productList = [];
     public $productsCache = [];
 
@@ -32,19 +32,26 @@ class Edit extends Component
 
     function mount($id)
     {
-        $this->productsCache = Product::whereIn(
-            'id',
-            collect($this->productList)->pluck('product_id')
-        )->get()->keyBy('id');
 
-        $this->purchase = Purchase::with('products.unit')->find($id);
+        $this->purchase = Purchase::with('products.unit')->findOrFail($id);
 
-        foreach ($this->purchase->products  as $key => $product) {
+        //ambil tax dari DB
+        $this->tax = $this->purchase->tax_percentage;
+
+        //isi ulang productList dari pivot
+        foreach ($this->purchase->products as $product) {
 
             $this->productList[] = [
                 'product_id' => $product->id,
+                'product_name' => $product->name,
+                'unit_name' => $product->unit->name,
+
                 'quantity' => $product->pivot->quantity,
                 'price' => $product->pivot->unit_price,
+
+                //optional (kalau mmau tampil diskon lama)
+                'original_price' => $product->purchase_price,
+                'discount' => 0, //kalau belum simpan diskon di DB
             ];
             //cache product
             $this->productsCache[$product->id] = $product;
@@ -82,8 +89,13 @@ class Edit extends Component
     }
     function selectProduct($id)
     {
-        $this->selectedProductId = $id;
-        $this->productSearch = Product::find($id)->name;
+        $product = Product::find($id);
+
+        if (!$product) return;
+
+        $this->selectedProductId = $product->id;
+        $this->productSearch = $product->name;
+        $this->price = $product->purchase_price;
     }
     function addToList()
     {
@@ -102,11 +114,18 @@ class Edit extends Component
             }
 
 
+            $product = Product::find($this->selectedProductId);
 
             array_push($this->productList, [
-                'product_id' => $this->selectedProductId,
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'unit_name' => $product->unit->name,
+
                 'quantity' => $this->quantity,
                 'price' => $this->price,
+
+                'original_price' => $product->purchase_price,
+                'discount' => 0,
             ]);
 
             $this->reset([
@@ -139,6 +158,11 @@ class Edit extends Component
             $this->purchase->update([
                 'purchase_date' => $this->purchase->purchase_date,
                 'supplier_id' => $this->purchase->supplier_id,
+
+                'subtotal' => $this->subtotal,
+                'tax_percentage' => $this->tax,
+                'tax_amount' => $this->taxAmount,
+                'grand_total' => $this->grandTotal,
             ]);
 
             //reset relasi
@@ -174,5 +198,22 @@ class Edit extends Component
             'suppliers' => $suppliers,
             'products' => $products,
         ]);
+    }
+        public function getSubtotalProperty()
+    {
+        return collect($this->productList)->sum(function ($item) {
+            return $item['quantity'] * $item['price'];
+        });
+    }
+
+    public function getTaxAmountProperty()
+    {
+        return (float) $this->subtotal * ((float) $this->tax / 100);
+
+    }
+
+    public function getGrandTotalProperty()
+    {
+        return (float) $this->subtotal + (float) $this->taxAmount;
     }
 }

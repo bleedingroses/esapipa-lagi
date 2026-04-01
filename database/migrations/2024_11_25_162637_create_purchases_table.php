@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('supplier_id')->constrained();
             $table->date('purchase_date');
+            $table->decimal('subtotal', 15, 2)->default(0);
+            $table->decimal('tax_percentage', 5, 2)->default(0);
+            $table->decimal('tax_amount', 15, 2)->default(0);
+            $table->decimal('grand_total', 15, 2)->default(0);            
             $table->timestamps();
         });
     }

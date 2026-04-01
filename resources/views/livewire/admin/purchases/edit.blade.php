@@ -43,9 +43,9 @@
 
                     <div class="mb-3">
                         <label for="" class="form-label">Cari Produk</label>
-                        <input type="text" wire:model.lazy='productSearch' class="form-control" />
+                        <input type="text" wire:model.live='productSearch' class="form-control" />
                         <ul class="list-group mt-2 w-100">
-                            @if (!empty($productSearch))
+                            @if ($productSearch != '')
                                 @foreach ($products as $product)
                                     <x-product-list-group :product="$product" :selectedProductId="$selectedProductId"/>
                                 @endforeach
@@ -66,10 +66,14 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="" class="form-label">Harga Satuan</label>
-                                <input wire:model='price' type="number" min="0" class="form-control" />
+                                <input wire:model='price' type="number" min="0" class="form-control" disabled/>
                                 @error('price')
                                     <small id="helpId" class="form-text text-danger">{{ $message }}</small>
                                 @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Diskon (%)</label>
+                                <input wire:model="discount" type="number" min="0" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -94,8 +98,9 @@
                                     <th>Nama Produk</th>
                                     <th>Jumlah</th>
                                     <th>Harga Satuan</th>
+                                    <th>Diskon</th>
                                     <th>Harga Total</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,20 +109,30 @@
                                         $total = 0;
                                     @endphp
                                     @foreach ($productList as $key => $listItem)
-                                        @php
-                                            $product = $productsCache[$listItem['product_id']] ?? null;
-                                        @endphp
                                         <tr>
-                                            
-                                            <td scope="row">{{ $product->id }}</td>
-                                            <td> {{ $product->name }} <br>
-                                                <small class="text-muted">
-                                                    {{ ($product->quantity ?? '-') . ($product->unit->name ?? '') }}
+                                            <td scope="row">
+                                                {{ $listItem['product_id'] }}
+                                            </td>
+                                            <td>
+                                                {{ $listItem['product_name'] }} <br>
+                                                <small
+                                                    class="text-muted">{{ $listItem['unit_name'] }}
                                                 </small>
                                             </td>
                                             <td>{{ $listItem['quantity'] }}</td>
-                                            <td>Rp {{ number_format($listItem['price'], 2) }}</td>
-                                            <td>Rp {{ number_format($listItem['quantity'] * $listItem['price'], 2) }}</td>
+                                            <td>
+                                                @if (($listItem['discount'] ?? 0) > 0 )
+                                                    <span style="text-decoration: line-through; color: gray;">
+                                                        Rp {{ number_format($listItem['original_price'], 2) }}
+                                                    </span>
+                                                    <br>
+                                                @endif
+                                                Rp {{ number_format($listItem['price'], 2) }}</td>
+                                            <td>
+                                                {{ $listItem['discount'] ?? 0 }}%
+                                            </td>
+                                            <td>Rp{{ number_format($listItem['quantity'] * $listItem['price'], 2) }}
+                                            </td>
                                             <td class="text-center">
                                                 @if ($listItem['quantity'] > 1)
                                                     <button wire:click='subtractQuantity({{ $key }})'
@@ -130,7 +145,7 @@
                                                     <i class="bi bi-plus"></i>
                                                 </button>
                                                 <button
-                                                    onclick="if(!confirm('Are you sure?')) return false"
+                                                    onclick="confirm('Are you sure you wish to remove this item from the list')||event.stopImmediatePropagation()"
                                                     wire:click='deleteCartItem({{ $key }})'
                                                     class="btn btn-danger">
                                                     <i class="bi bi-trash-fill"></i>
@@ -143,26 +158,42 @@
                                         @endphp
                                     @endforeach
                                     <tr>
+                                        <td colspan="4"><strong>SUBTOTAL</strong></td>
+                                        <td colspan="2">
+                                            <strong>Rp {{ number_format($this->subtotal, 2) }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <strong>PPN %</strong>
+                                        </td>
+                                        {{-- INPUT PPN --}}
+                                        <td colspan="2">
+                                            <input wire:model.live="tax"
+                                                    type="number"
+                                                    min="0"
+                                                    max="100"
+                                                    class="form-control w-50"/>
+                                        </td>
+                                        {{-- HASIL PPN --}}
+                                        <td colspan="2">
+                                            <strong>Rp {{ number_format($this->taxAmount, 2) }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" style="font-size: 18px">
+                                            <strong>TOTAL AKHIR</strong>
+                                        </td>
                                         <td colspan="2" style="font-size: 18px">
-                                            <strong>TOTAL</strong>
+                                            <strong>Rp {{ number_format($this->grandTotal, 2) }}</strong>
                                         </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td style="font-size: 18px">
-                                            <strong>Rp {{ number_format($total, 2) }}</strong>
-                                        </td>
-                                        <td></td>
                                     </tr>
                                 @endif
                             </tbody>
                         </table>
                             <button
-                                wire:click='makePurchase'
-                                wire:loading.attr="disabled"
-                                class="btn btn-dark w-100">
-                                <span wire:loading.remove>Update</span>
-                                <span wire:loading>Loading...</span>
-                            </button>
+                                onclick="confirm('Are you sure you wish to make the purchase')||event.stopImmediatePropagation()"
+                                wire:click='makePurchase' class="btn btn-dark text-inv-primary w-100">Buat</button>
 
                     </div>
                 </div>

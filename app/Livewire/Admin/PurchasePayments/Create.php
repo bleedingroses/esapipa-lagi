@@ -11,11 +11,8 @@ use Livewire\Component;
 class Create extends Component
 {
     public $supplierSearch;
-    public $selectedPurchaseId;
-    public $amount;
     public PurchasePayment $purchase_payment;
 
-    public $purchaseList = [];
 
     function rules()
     {
@@ -27,100 +24,32 @@ class Create extends Component
         ];
     }
 
-    function selectSupplier($id)
-    {
-        $this->purchase_payment->supplier_id = $id;
-        $this->supplierSearch = $this->purchase_payment->supplier->name;
-    }
-
-    function takeBalance()
-    {
-        if ($this->selectedPurchaseId) {
-            $this->amount = Purchase::find($this->selectedPurchaseId)->total_balance;
-            foreach ($this->purchaseList as $key => $listItem) {
-                if ($listItem['purchase_id'] == $this->selectedPurchaseId) {
-                    $this->amount = Purchase::find($listItem['purchase_id'])->total_balance - $listItem['amount'];
-                }
-            }
-        }
-    }
-    function takeFullBalance()
-    {
-        $total = 0;
-        foreach ($this->purchaseList as $key => $item) {
-            $total += $item['amount'];
-        }
-        $this->purchase_payment->amount = $total;
-    }
-
     function mount()
     {
         $this->purchase_payment = new PurchasePayment();
         $this->purchase_payment->payment_time = Carbon::now()->toDateTimeLocalString();
     }
 
-    function addToList()
+    function selectSupplier($id)
     {
-        try {
-            $this->validate([
-                'selectedPurchaseId' => 'required',
-                'amount' => 'required',
-            ]);
+        $this->purchase_payment->supplier_id = $id;
+        $this->supplierSearch = Supplier::find($id)?->name;
 
-
-            if (Purchase::find($this->selectedPurchaseId)->total_balance < $this->amount) {
-                throw new \Exception("Total Balance is Low", 1);
-            }
-            $totalAlreadyAllocated = 0;
-
-            foreach ($this->purchaseList as $listItem) {
-                if ($listItem['purchase_id'] == $this->selectedPurchaseId) {
-                    $totalAlreadyAllocated += $listItem['amount'];
-                }
-            }
-
-            $purchase = Purchase::find($this->selectedPurchaseId);
-
-            if (($totalAlreadyAllocated + $this->amount) > $purchase->total_balance) {
-                throw new \Exception("Total Balance is Low", 1);
-            }
-
-            foreach ($this->purchaseList as $key => $listItem) {
-                if ($listItem['purchase_id'] == $this->selectedPurchaseId) {
-                    $this->purchaseList[$key]['amount'] += $this->amount;
-                    return;
-                }
-            }
-
-
-
-            array_push($this->purchaseList, [
-                'purchase_id' => $this->selectedPurchaseId,
-                'amount' => $this->amount,
-            ]);
-
-            $this->reset([
-                'selectedPurchaseId',
-                'amount',
-            ]);
-        }
-
-        catch (\Throwable $th) {
-            $this->dispatch('done', error: "Something Went Wrong: " . $th->getMessage());
-        }
-        $totalList = collect($this->purchaseList)->sum('amount');
-
-        if (($totalList + $this->amount) > $this->purchase_payment->amount) {
-            throw new \Exception("Payment amount is not enough", 1);
-        }
+        $this->calculateTotalDebt();
     }
 
-    function deleteListItem($key)
+    function calculateTotalDebt()
     {
-        array_splice($this->purchaseList, $key, 1);
+        if (!$this->purchase_payment->supplier_id) return;
+
+        $supplier = Supplier::with('purchases')->find($this->purchase_payment->supplier_id);
+
+        $totalDebt = $supplier->purchases->sum(function ($purchase) {
+            return $purchase->total_balance;
+        });
+
+        $this->purchase_payment->amount = $totalDebt;
     }
-
-
 
     function savePayment()
     {
@@ -128,23 +57,33 @@ class Create extends Component
             $this->validate();
             $this->purchase_payment->save();
 
-            foreach ($this->purchaseList as $key => $listItem) {
-                $this->purchase_payment->purchases()->attach($listItem['purchase_id'], [
-                    'amount' => $listItem['amount'],
-                ]);
+            //ambil semua yang belum lunas
+            $purchases = Purchase::where('supplier_id', $this->purchase_payment->supplier_id)->get();
+
+            foreach ($purchases as $purchase) {
+
+                $remaining = $purchase->total_balance;
+
+                if ($remaining > 0) {
+                    $this->purchase_payment->purchases()->attach($purchase->id, [
+                        'amount' => $remaining,
+                    ]);
+                }
             }
+
             return redirect()->route('admin.purchase-payments.index');
+
         } catch (\Throwable $th) {
             $this->dispatch('done', error: "Something Went Wrong: " . $th->getMessage());
         }
     }
     public function render()
     {
-        $suppliers = Supplier::where('name', 'like', '%' . $this->supplierSearch . '%')
-        ->with('purchases.products') // ← INI KUNCI
-        ->get();
+        $suppliers = Supplier::where('name', 'like', '%' . $this->supplierSearch . '%')->get();
+
         return view('livewire.admin.purchase-payments.create', [
             'suppliers' => $suppliers
         ]);
     }
+
 }

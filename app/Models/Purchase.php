@@ -34,9 +34,7 @@ class Purchase extends Model
 
     public function getTotalAmountAttribute()
     {
-        return $this->products()->get()->sum(function ($product) {
-            return $product->pivot->quantity * $product->pivot->unit_price;
-        });
+        return $this->grand_total;
     }
     public function getTotalQuantityAttribute()
     {
@@ -48,7 +46,7 @@ class Purchase extends Model
 
     function getTotalBalanceAttribute()
     {
-        return $this->total_amount - $this->total_paid; 
+        return $this->grand_total - $this->total_paid; 
     }
     function getIsPaidAttribute()
     {

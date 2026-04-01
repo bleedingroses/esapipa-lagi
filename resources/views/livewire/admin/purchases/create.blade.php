@@ -66,10 +66,14 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="" class="form-label">Harga Satuan</label>
-                                <input wire:model='price' type="number" min="0" class="form-control" />
+                                <input wire:model='price' type="number" min="0" class="form-control" disabled/>
                                 @error('price')
                                     <small id="helpId" class="form-text text-danger">{{ $message }}</small>
                                 @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Diskon (%)</label>
+                                <input wire:model="discount" type="number" min="0" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -94,6 +98,7 @@
                                     <th>Nama Produk</th>
                                     <th>Jumlah</th>
                                     <th>Harga Satuan</th>
+                                    <th>Diskon</th>
                                     <th>Harga Total</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -106,15 +111,26 @@
                                     @foreach ($productList as $key => $listItem)
                                         <tr>
                                             <td scope="row">
-                                                {{ App\Models\Product::find($listItem['product_id'])->id }}
+                                                {{ $listItem['product_id'] }}
                                             </td>
                                             <td>
-                                                {{ App\Models\Product::find($listItem['product_id'])->name }} <br>
+                                                {{ $listItem['product_name'] }} <br>
                                                 <small
-                                                    class="text-muted">{{ App\Models\Product::find($listItem['product_id'])->quantity . App\Models\Product::find($listItem['product_id'])->unit->name }}</small>
+                                                    class="text-muted">{{ $listItem['unit_name'] }}
+                                                </small>
                                             </td>
                                             <td>{{ $listItem['quantity'] }}</td>
-                                            <td>Rp {{ number_format($listItem['price'], 2) }}</td>
+                                            <td>
+                                                @if (($listItem['discount'] ?? 0) > 0 )
+                                                    <span style="text-decoration: line-through; color: gray;">
+                                                        Rp {{ number_format($listItem['original_price'], 2) }}
+                                                    </span>
+                                                    <br>
+                                                @endif
+                                                Rp {{ number_format($listItem['price'], 2) }}</td>
+                                            <td>
+                                                {{ $listItem['discount'] ?? 0 }}%
+                                            </td>
                                             <td>Rp{{ number_format($listItem['quantity'] * $listItem['price'], 2) }}
                                             </td>
                                             <td class="text-center">
@@ -142,15 +158,35 @@
                                         @endphp
                                     @endforeach
                                     <tr>
+                                        <td colspan="4"><strong>SUBTOTAL</strong></td>
+                                        <td colspan="2">
+                                            <strong>Rp {{ number_format($this->subtotal, 2) }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <strong>PPN %</strong>
+                                        </td>
+                                        {{-- INPUT PPN --}}
+                                        <td colspan="2">
+                                            <input wire:model.live="tax"
+                                                    type="number"
+                                                    min="0"
+                                                    max="100"
+                                                    class="form-control w-50"/>
+                                        </td>
+                                        {{-- HASIL PPN --}}
+                                        <td colspan="2">
+                                            <strong>Rp {{ number_format($this->taxAmount, 2) }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" style="font-size: 18px">
+                                            <strong>TOTAL AKHIR</strong>
+                                        </td>
                                         <td colspan="2" style="font-size: 18px">
-                                            <strong>TOTAL</strong>
+                                            <strong>Rp {{ number_format($this->grandTotal, 2) }}</strong>
                                         </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td style="font-size: 18px">
-                                            <strong>Rp {{ number_format($total, 2) }}</strong>
-                                        </td>
-                                        <td></td>
                                     </tr>
                                 @endif
                             </tbody>
