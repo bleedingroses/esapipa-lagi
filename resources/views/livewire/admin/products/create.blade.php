@@ -52,9 +52,9 @@
 
                 <div class="col-md-6 col-12">
                     <div class="mb-3">
-                        <label for="" class="form-label">Satuan Ukuran Produk</label>
+                        <label for="" class="form-label">Satuan Produk</label>
                         <select wire:model.live='product.unit_id' class="form-select " name="" id="">
-                            <option selected>Pilih Satuan Ukuran</option>
+                            <option selected>Pilih Satuan</option>
                             @foreach ($units as $unit)
                                 <option value="{{ $unit->id }}">{{ $unit->name }}</option>
                             @endforeach
