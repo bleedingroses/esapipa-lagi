@@ -74,6 +74,12 @@ class BrandsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+                        [
+                'name' => 'OEM',
+                'logo_path' => 'logos/toyota.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

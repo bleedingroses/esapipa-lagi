@@ -15,68 +15,14 @@ class UnitsSeeder extends Seeder
     {
         DB::table('units')->insert([
             [
-                'name' => 'Kilogram',
-                'symbol' => 'kg',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Gram',
-                'symbol' => 'g',
+                'name' => 'Buah',
+                'symbol' => 'bh',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'Meter',
                 'symbol' => 'm',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Liter',
-                'symbol' => 'L',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Mililiter',
-                'symbol' => 'mL',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Piece',
-                'symbol' => 'pc',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Box',
-                'symbol' => 'box',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Pack',
-                'symbol' => 'pk',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Centimeter',
-                'symbol' => 'cm',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Square Meter',
-                'symbol' => 'm²',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Millimeter',
-                'symbol' => 'mm',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
