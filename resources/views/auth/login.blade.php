@@ -16,9 +16,9 @@
             @csrf
 
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-                    autofocus autocomplete="username" />
+                <x-label for="email" value="Email / Name" />
+                <x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="old('email')" required
+                    autofocus />
             </div>
 
             <div class="mt-4">
@@ -54,7 +54,7 @@
 
     <script>
         function pasteCredentials() {
-            document.getElementById('email').value = "testuser@example.com"
+            document.getElementById('name').value = "testuser"
             document.getElementById('password').value = "password"
         }
         // console.log('test done')
