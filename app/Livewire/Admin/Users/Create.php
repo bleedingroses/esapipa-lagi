@@ -2,51 +2,50 @@
 
 namespace App\Livewire\Admin\Users;
 
-use App\Mail\UserCreatedMail;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class Create extends Component
 {
-    public User $user;
+    public $user = [];
     public $selectedRoles = [];
 
     function rules()
     {
         return [
             'user.name' => "required",
-            'selectedRoles' => "required",
             'user.email' => "required|email",
+            'user.password' => "required|min:8",
+            'selectedRoles' => "required",
         ];
     }
 
     function mount()
     {
-        $this->user = new User();
+        $this->user = [
+            'name' => '',
+            'email' => '',
+            'password' => '',
+        ];
     }
 
-    function updated()
+    function updated($propertyName)
     {
-        $this->validate();
+        $this->validateOnly($propertyName);
     }
 
     function save()
     {
         $this->validate();
         try {
-            $password = Str::random(12);
-            $this->user->password = Hash::make($password);
-            $this->user->save();
 
-            $this->user->roles()->attach($this->selectedRoles);
+            $user = User::create($this->user);
 
-            Mail::to($this->user->email)->send(new UserCreatedMail($this->user, $password));
+            $user->roles()->attach($this->selectedRoles);
 
             return redirect()->route('admin.users.index');
+
         } catch (\Throwable $th) {
             $this->dispatch('done', error: "Something Went Wrong: " . $th->getMessage());
         }
